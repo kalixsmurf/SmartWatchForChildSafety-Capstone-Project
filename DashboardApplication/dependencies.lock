@@ -1,0 +1,46 @@
+dependencies:
+  chmorgan/esp-audio-player:
+    dependencies: []
+    source:
+      path: C:\Users\BiLKANCOMPUTERS\Desktop\CNG492\DashboardApplication\components\chmorgan__esp-audio-player
+      type: local
+    version: 1.0.7
+  chmorgan/esp-libhelix-mp3:
+    dependencies: []
+    source:
+      path: C:\Users\BiLKANCOMPUTERS\Desktop\CNG492\DashboardApplication\components\chmorgan__esp-libhelix-mp3
+      type: local
+    version: 1.0.3
+  espressif/esp-dsp:
+    dependencies: []
+    source:
+      path: C:\Users\BiLKANCOMPUTERS\Desktop\CNG492\DashboardApplication\components\espressif__esp-dsp
+      type: local
+    version: 1.4.12
+  espressif/esp-sr:
+    dependencies: []
+    source:
+      path: C:\Users\BiLKANCOMPUTERS\Desktop\CNG492\DashboardApplication\components\espressif__esp-sr
+      type: local
+    version: 1.9.4
+  idf:
+    source:
+      type: idf
+    version: 5.4.0
+  lvgl/lvgl:
+    component_hash: 096c69af22eaf8a2b721e3913da91918c5e6bf1a762a113ec01f401aa61337a0
+    dependencies: []
+    source:
+      registry_url: https://components.espressif.com/
+      type: service
+    version: 9.2.2
+direct_dependencies:
+- chmorgan/esp-audio-player
+- chmorgan/esp-libhelix-mp3
+- espressif/esp-dsp
+- espressif/esp-sr
+- idf
+- lvgl/lvgl
+manifest_hash: 36f41f5b653a54972e30012c6948e7acc1fef04c317e7e3860ca262fed67500a
+target: esp32s3
+version: 2.0.0

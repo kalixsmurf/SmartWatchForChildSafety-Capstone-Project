@@ -1,0 +1,12 @@
+{
+    "idf.customExtraVars": {
+        "IDF_TARGET": "esp32s3"
+    },
+    "idf.openOcdConfigs": [
+        "board/esp32s3-builtin.cfg"
+    ],
+    "files.associations": {
+        "display_spd2010.h": "c",
+        "ui.h": "c"
+    }
+}
