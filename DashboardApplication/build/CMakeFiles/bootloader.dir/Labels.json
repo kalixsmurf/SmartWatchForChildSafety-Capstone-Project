@@ -2,34 +2,34 @@
 	"sources" : 
 	[
 		{
-			"file" : "C:/Users/BiLKANCOMPUTERS/Desktop/CNG492/DashboardApplication/build/CMakeFiles/bootloader"
+			"file" : "C:/Users/labuser/SmartWatchForChildSafety-Capstone-Project/DashboardApplication/build/CMakeFiles/bootloader"
 		},
 		{
-			"file" : "C:/Users/BiLKANCOMPUTERS/Desktop/CNG492/DashboardApplication/build/CMakeFiles/bootloader.rule"
+			"file" : "C:/Users/labuser/SmartWatchForChildSafety-Capstone-Project/DashboardApplication/build/CMakeFiles/bootloader.rule"
 		},
 		{
-			"file" : "C:/Users/BiLKANCOMPUTERS/Desktop/CNG492/DashboardApplication/build/CMakeFiles/bootloader-complete.rule"
+			"file" : "C:/Users/labuser/SmartWatchForChildSafety-Capstone-Project/DashboardApplication/build/CMakeFiles/bootloader-complete.rule"
 		},
 		{
-			"file" : "C:/Users/BiLKANCOMPUTERS/Desktop/CNG492/DashboardApplication/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule"
+			"file" : "C:/Users/labuser/SmartWatchForChildSafety-Capstone-Project/DashboardApplication/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule"
 		},
 		{
-			"file" : "C:/Users/BiLKANCOMPUTERS/Desktop/CNG492/DashboardApplication/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule"
+			"file" : "C:/Users/labuser/SmartWatchForChildSafety-Capstone-Project/DashboardApplication/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule"
 		},
 		{
-			"file" : "C:/Users/BiLKANCOMPUTERS/Desktop/CNG492/DashboardApplication/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule"
+			"file" : "C:/Users/labuser/SmartWatchForChildSafety-Capstone-Project/DashboardApplication/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule"
 		},
 		{
-			"file" : "C:/Users/BiLKANCOMPUTERS/Desktop/CNG492/DashboardApplication/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule"
+			"file" : "C:/Users/labuser/SmartWatchForChildSafety-Capstone-Project/DashboardApplication/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule"
 		},
 		{
-			"file" : "C:/Users/BiLKANCOMPUTERS/Desktop/CNG492/DashboardApplication/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule"
+			"file" : "C:/Users/labuser/SmartWatchForChildSafety-Capstone-Project/DashboardApplication/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule"
 		},
 		{
-			"file" : "C:/Users/BiLKANCOMPUTERS/Desktop/CNG492/DashboardApplication/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule"
+			"file" : "C:/Users/labuser/SmartWatchForChildSafety-Capstone-Project/DashboardApplication/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule"
 		},
 		{
-			"file" : "C:/Users/BiLKANCOMPUTERS/Desktop/CNG492/DashboardApplication/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule"
+			"file" : "C:/Users/labuser/SmartWatchForChildSafety-Capstone-Project/DashboardApplication/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule"
 		}
 	],
 	"target" : 

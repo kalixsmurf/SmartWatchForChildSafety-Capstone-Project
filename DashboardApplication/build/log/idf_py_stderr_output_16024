@@ -1,0 +1,124 @@
+[0;33m--- Warning: GDB cannot open serial ports accessed as COMx[0m
+[0;33m--- Using \\.\COM3 instead...[0m
+[0;33m--- esp-idf-monitor 1.6.0 on \\.\COM3 115200[0m
+[0;33m--- Quit: Ctrl+] | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H[0m
+[0;33m--- 0x40048d14: uart_rx_one_char in ROM
+[0m
+[0;33m--- 0x40375f2e: panic_abort at C:/Users/labuser/esp/v5.3.2/esp-idf/components/esp_system/panic.c:463
+--- 0x403806d5: esp_system_abort at C:/Users/labuser/esp/v5.3.2/esp-idf/components/esp_system/port/esp_system_chip.c:92
+--- 0x4038179e: vApplicationStackOverflowHook at C:/Users/labuser/esp/v5.3.2/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c:563
+--- 0x40382c1f: vTaskSwitchContext at C:/Users/labuser/esp/v5.3.2/esp-idf/components/freertos/FreeRTOS-Kernel/tasks.c:3701 (discriminator 7)
+--- 0x40381864: _frxt_dispatch at C:/Users/labuser/esp/v5.3.2/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/portasm.S:451
+--- 0x4038185a: _frxt_int_exit at C:/Users/labuser/esp/v5.3.2/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/portasm.S:246
+--- 0x40005bb0: __call_coex_core_release in ROM
+[0m
+[0;33m--- 0x40375e68: esp_restart_noos at C:/Users/labuser/esp/v5.3.2/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c:158
+[0m
+[0;33m--- 0x40375f2e: panic_abort at C:/Users/labuser/esp/v5.3.2/esp-idf/components/esp_system/panic.c:463
+--- 0x403806d5: esp_system_abort at C:/Users/labuser/esp/v5.3.2/esp-idf/components/esp_system/port/esp_system_chip.c:92
+--- 0x4038179e: vApplicationStackOverflowHook at C:/Users/labuser/esp/v5.3.2/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c:563
+--- 0x40382c1f: vTaskSwitchContext at C:/Users/labuser/esp/v5.3.2/esp-idf/components/freertos/FreeRTOS-Kernel/tasks.c:3701 (discriminator 7)
+--- 0x40381864: _frxt_dispatch at C:/Users/labuser/esp/v5.3.2/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/portasm.S:451
+--- 0x4038185a: _frxt_int_exit at C:/Users/labuser/esp/v5.3.2/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/portasm.S:246
+[0m
+[0;33m--- 0x40375e68: esp_restart_noos at C:/Users/labuser/esp/v5.3.2/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c:158
+[0m
+[0;33m--- 0x40375f2e: panic_abort at C:/Users/labuser/esp/v5.3.2/esp-idf/components/esp_system/panic.c:463
+--- 0x403806d5: esp_system_abort at C:/Users/labuser/esp/v5.3.2/esp-idf/components/esp_system/port/esp_system_chip.c:92
+--- 0x4038179e: vApplicationStackOverflowHook at C:/Users/labuser/esp/v5.3.2/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c:563
+--- 0x40382c1f: vTaskSwitchContext at C:/Users/labuser/esp/v5.3.2/esp-idf/components/freertos/FreeRTOS-Kernel/tasks.c:3701 (discriminator 7)
+--- 0x40381864: _frxt_dispatch at C:/Users/labuser/esp/v5.3.2/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/portasm.S:451
+--- 0x4038185a: _frxt_int_exit at C:/Users/labuser/esp/v5.3.2/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/portasm.S:246
+[0m
+[0;33m--- 0x40375e68: esp_restart_noos at C:/Users/labuser/esp/v5.3.2/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c:158
+[0m
+[0;33m--- 0x40375f2e: panic_abort at C:/Users/labuser/esp/v5.3.2/esp-idf/components/esp_system/panic.c:463
+--- 0x403806d5: esp_system_abort at C:/Users/labuser/esp/v5.3.2/esp-idf/components/esp_system/port/esp_system_chip.c:92
+--- 0x4038179e: vApplicationStackOverflowHook at C:/Users/labuser/esp/v5.3.2/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c:563
+--- 0x40382c1f: vTaskSwitchContext at C:/Users/labuser/esp/v5.3.2/esp-idf/components/freertos/FreeRTOS-Kernel/tasks.c:3701 (discriminator 7)
+--- 0x40381864: _frxt_dispatch at C:/Users/labuser/esp/v5.3.2/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/portasm.S:451
+--- 0x4038185a: _frxt_int_exit at C:/Users/labuser/esp/v5.3.2/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/portasm.S:246
+[0m
+[0;33m--- 0x40375e68: esp_restart_noos at C:/Users/labuser/esp/v5.3.2/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c:158
+[0m
+[0;33m--- 0x40375f2e: panic_abort at C:/Users/labuser/esp/v5.3.2/esp-idf/components/esp_system/panic.c:463
+--- 0x403806d5: esp_system_abort at C:/Users/labuser/esp/v5.3.2/esp-idf/components/esp_system/port/esp_system_chip.c:92
+--- 0x4038179e: vApplicationStackOverflowHook at C:/Users/labuser/esp/v5.3.2/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c:563
+--- 0x40382c1f: vTaskSwitchContext at C:/Users/labuser/esp/v5.3.2/esp-idf/components/freertos/FreeRTOS-Kernel/tasks.c:3701 (discriminator 7)
+--- 0x40381864: _frxt_dispatch at C:/Users/labuser/esp/v5.3.2/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/portasm.S:451
+--- 0x4038185a: _frxt_int_exit at C:/Users/labuser/esp/v5.3.2/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/portasm.S:246
+[0m
+[0;33m--- 0x40375e68: esp_restart_noos at C:/Users/labuser/esp/v5.3.2/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c:158
+[0m
+[0;33m--- 0x4207c830: ieee80211_timer_do_process at ??:?
+[0m
+[0;33m--- 0x400570e8: memset in ROM
+--- 0x400570f3: memset in ROM
+[0m
+[0;33m--- 0x40375e68: esp_restart_noos at C:/Users/labuser/esp/v5.3.2/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c:158
+[0m
+[0;33m--- 0x40375f2e: panic_abort at C:/Users/labuser/esp/v5.3.2/esp-idf/components/esp_system/panic.c:463
+--- 0x403806d5: esp_system_abort at C:/Users/labuser/esp/v5.3.2/esp-idf/components/esp_system/port/esp_system_chip.c:92
+--- 0x4038179e: vApplicationStackOverflowHook at C:/Users/labuser/esp/v5.3.2/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c:563
+--- 0x40382c1f: vTaskSwitchContext at C:/Users/labuser/esp/v5.3.2/esp-idf/components/freertos/FreeRTOS-Kernel/tasks.c:3701 (discriminator 7)
+--- 0x40381864: _frxt_dispatch at C:/Users/labuser/esp/v5.3.2/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/portasm.S:451
+--- 0x4038185a: _frxt_int_exit at C:/Users/labuser/esp/v5.3.2/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/portasm.S:246
+[0m
+[0;33m--- 0x40375e68: esp_restart_noos at C:/Users/labuser/esp/v5.3.2/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c:158
+[0m
+[0;33m--- 0x4207c830: ieee80211_timer_do_process at ??:?
+[0m
+[0;33m--- 0x400570e8: memset in ROM
+--- 0x400570f3: memset in ROM
+[0m
+[0;33m--- 0x40375e68: esp_restart_noos at C:/Users/labuser/esp/v5.3.2/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c:158
+[0m
+[0;33m--- 0x4207c830: ieee80211_timer_do_process at ??:?
+[0m
+[0;33m--- 0x400570e8: memset in ROM
+--- 0x400570f3: memset in ROM
+[0m
+[0;33m--- 0x40375e68: esp_restart_noos at C:/Users/labuser/esp/v5.3.2/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c:158
+[0m
+[0;33m--- To exit from IDF monitor please use "Ctrl+]". Alternatively, you can use Ctrl+T Ctrl+X to exit.[0m
+[0;33m--- 0x4207c830: ieee80211_timer_do_process at ??:?
+[0m
+[0;33m--- 0x400570e8: memset in ROM
+--- 0x400570f3: memset in ROM
+[0m
+[0;33m--- 0x40375e68: esp_restart_noos at C:/Users/labuser/esp/v5.3.2/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c:158
+[0m
+[0;33m--- To exit from IDF monitor please use "Ctrl+]". Alternatively, you can use Ctrl+T Ctrl+X to exit.[0m
+[0;33m--- Warning: Writing to serial is timing out. Please make sure that your application supports an interactive console and that you have picked the correct console for serial communication.[0m
+[0;33m--- 0x4207c830: ieee80211_timer_do_process at ??:?
+[0m
+[0;33m--- 0x400570e8: memset in ROM
+--- 0x400570f3: memset in ROM
+[0m
+[0;33m--- 0x40375e68: esp_restart_noos at C:/Users/labuser/esp/v5.3.2/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c:158
+[0m
+[0;33m--- 0x400570e8: memset in ROM
+--- 0x400570f3: memset in ROM
+[0m
+[0;33m--- 0x40375e68: esp_restart_noos at C:/Users/labuser/esp/v5.3.2/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c:158
+[0m
+[0;33m--- 0x40375f2e: panic_abort at C:/Users/labuser/esp/v5.3.2/esp-idf/components/esp_system/panic.c:463
+--- 0x403806d5: esp_system_abort at C:/Users/labuser/esp/v5.3.2/esp-idf/components/esp_system/port/esp_system_chip.c:92
+--- 0x4038179e: vApplicationStackOverflowHook at C:/Users/labuser/esp/v5.3.2/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c:563
+--- 0x40382c1f: vTaskSwitchContext at C:/Users/labuser/esp/v5.3.2/esp-idf/components/freertos/FreeRTOS-Kernel/tasks.c:3701 (discriminator 7)
+--- 0x40381864: _frxt_dispatch at C:/Users/labuser/esp/v5.3.2/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/portasm.S:451
+--- 0x4038185a: _frxt_int_exit at C:/Users/labuser/esp/v5.3.2/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/portasm.S:246
+[0m
+[0;33m--- 0x40375e68: esp_restart_noos at C:/Users/labuser/esp/v5.3.2/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c:158
+[0m
+[0;33m--- To exit from IDF monitor please use "Ctrl+]". Alternatively, you can use Ctrl+T Ctrl+X to exit.[0m
+[0m
+Traceback (most recent call last):
+  File "C:\Users\labuser\esp\v5.3.2\esp-idf\tools/idf_monitor.py", line 11, in <module>
+    sys.exit(subprocess.run([sys.executable, '-m', 'esp_idf_monitor'] + sys.argv[1:]).returncode)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "subprocess.py", line 550, in run
+  File "subprocess.py", line 1199, in communicate
+  File "subprocess.py", line 1262, in wait
+  File "subprocess.py", line 1543, in _wait
+KeyboardInterrupt

@@ -57,7 +57,7 @@ lv_display_rotation_t example_lvgl_port_update_callback(lv_display_t * disp_drv)
     switch (rotation) {
     case LV_DISPLAY_ROTATION_0:
         esp_lcd_panel_swap_xy(panel_handle, false);
-        esp_lcd_panel_mirror(panel_handle, true, false);
+        esp_lcd_panel_mirror(panel_handle, false, false);
         break;
     case LV_DISPLAY_ROTATION_90:
         esp_lcd_panel_swap_xy(panel_handle, true);
