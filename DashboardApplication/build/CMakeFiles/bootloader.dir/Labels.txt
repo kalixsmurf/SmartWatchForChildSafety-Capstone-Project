@@ -1,13 +1,13 @@
 # Target labels
  bootloader
 # Source files and their labels
-C:/Users/labuser/SmartWatchForChildSafety-Capstone-Project/DashboardApplication/build/CMakeFiles/bootloader
-C:/Users/labuser/SmartWatchForChildSafety-Capstone-Project/DashboardApplication/build/CMakeFiles/bootloader.rule
-C:/Users/labuser/SmartWatchForChildSafety-Capstone-Project/DashboardApplication/build/CMakeFiles/bootloader-complete.rule
-C:/Users/labuser/SmartWatchForChildSafety-Capstone-Project/DashboardApplication/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule
-C:/Users/labuser/SmartWatchForChildSafety-Capstone-Project/DashboardApplication/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
-C:/Users/labuser/SmartWatchForChildSafety-Capstone-Project/DashboardApplication/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
-C:/Users/labuser/SmartWatchForChildSafety-Capstone-Project/DashboardApplication/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
-C:/Users/labuser/SmartWatchForChildSafety-Capstone-Project/DashboardApplication/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
-C:/Users/labuser/SmartWatchForChildSafety-Capstone-Project/DashboardApplication/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
-C:/Users/labuser/SmartWatchForChildSafety-Capstone-Project/DashboardApplication/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule
+C:/Users/BiLKANCOMPUTERS/Desktop/School/CNG492/DashboardApplication/build/CMakeFiles/bootloader
+C:/Users/BiLKANCOMPUTERS/Desktop/School/CNG492/DashboardApplication/build/CMakeFiles/bootloader.rule
+C:/Users/BiLKANCOMPUTERS/Desktop/School/CNG492/DashboardApplication/build/CMakeFiles/bootloader-complete.rule
+C:/Users/BiLKANCOMPUTERS/Desktop/School/CNG492/DashboardApplication/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule
+C:/Users/BiLKANCOMPUTERS/Desktop/School/CNG492/DashboardApplication/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
+C:/Users/BiLKANCOMPUTERS/Desktop/School/CNG492/DashboardApplication/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
+C:/Users/BiLKANCOMPUTERS/Desktop/School/CNG492/DashboardApplication/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
+C:/Users/BiLKANCOMPUTERS/Desktop/School/CNG492/DashboardApplication/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
+C:/Users/BiLKANCOMPUTERS/Desktop/School/CNG492/DashboardApplication/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
+C:/Users/BiLKANCOMPUTERS/Desktop/School/CNG492/DashboardApplication/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule

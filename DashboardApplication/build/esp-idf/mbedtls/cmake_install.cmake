@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/labuser/esp/v5.3.2/esp-idf/components/mbedtls
+# Install script for directory: C:/Users/BiLKANCOMPUTERS/esp/v5.4/esp-idf/components/mbedtls
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -34,11 +34,11 @@ endif()
 
 # Set path to fallback-tool for dependency-resolution.
 if(NOT DEFINED CMAKE_OBJDUMP)
-  set(CMAKE_OBJDUMP "C:/Users/labuser/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20240530/xtensa-esp-elf/bin/xtensa-esp32s3-elf-objdump.exe")
+  set(CMAKE_OBJDUMP "C:/Users/BiLKANCOMPUTERS/.espressif/tools/xtensa-esp-elf/esp-14.2.0_20241119/xtensa-esp-elf/bin/xtensa-esp32s3-elf-objdump.exe")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/Users/labuser/SmartWatchForChildSafety-Capstone-Project/DashboardApplication/build/esp-idf/mbedtls/mbedtls/cmake_install.cmake")
+  include("C:/Users/BiLKANCOMPUTERS/Desktop/School/CNG492/DashboardApplication/build/esp-idf/mbedtls/mbedtls/cmake_install.cmake")
 endif()
 

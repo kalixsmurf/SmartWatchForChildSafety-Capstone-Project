@@ -1,0 +1,15 @@
+CMake Error at C:/Users/BiLKANCOMPUTERS/esp/v5.4/esp-idf/tools/cmake/build.cmake:610 (message):
+  ERROR: The "path" field in the manifest file
+  "C:\Users\labuser\SmartWatchForChildSafety-Capstone-Project\DashboardApplication\components\chmorgan__esp-audio-player\idf_component.yml"
+  does not point to a directory.  You can safely remove this field from the
+  manifest if this project is an example copied from a component repository.
+  The dependency will be downloaded from the ESP component registry.
+  Documentation:
+  https://docs.espressif.com/projects/idf-component-manager/en/latest/reference/manifest_file.html#override-path
+
+
+Call Stack (most recent call first):
+  C:/Users/BiLKANCOMPUTERS/esp/v5.4/esp-idf/tools/cmake/project.cmake:710 (idf_build_process)
+  CMakeLists.txt:4 (project)
+
+

@@ -2,35 +2,35 @@ dependencies:
   chmorgan/esp-audio-player:
     dependencies: []
     source:
-      path: C:\Users\labuser\SmartWatchForChildSafety-Capstone-Project\DashboardApplication\components\chmorgan__esp-audio-player
+      path: C:\Users\BiLKANCOMPUTERS\Desktop\School\CNG492\DashboardApplication\components\chmorgan__esp-audio-player
       type: local
     version: 1.0.7
   chmorgan/esp-libhelix-mp3:
     dependencies: []
     source:
-      path: C:\Users\labuser\SmartWatchForChildSafety-Capstone-Project\DashboardApplication\components\chmorgan__esp-libhelix-mp3
+      path: C:\Users\BiLKANCOMPUTERS\Desktop\School\CNG492\DashboardApplication\components\chmorgan__esp-libhelix-mp3
       type: local
     version: 1.0.3
   espressif/esp-dsp:
     dependencies: []
     source:
-      path: C:\Users\labuser\SmartWatchForChildSafety-Capstone-Project\DashboardApplication\components\espressif__esp-dsp
+      path: C:\Users\BiLKANCOMPUTERS\Desktop\School\CNG492\DashboardApplication\components\espressif__esp-dsp
       type: local
     version: 1.4.12
   espressif/esp-sr:
     dependencies: []
     source:
-      path: C:\Users\labuser\SmartWatchForChildSafety-Capstone-Project\DashboardApplication\components\espressif__esp-sr
+      path: C:\Users\BiLKANCOMPUTERS\Desktop\School\CNG492\DashboardApplication\components\espressif__esp-sr
       type: local
     version: 1.9.4
   idf:
     source:
       type: idf
-    version: 5.3.2
+    version: 5.4.0
   lvgl/lvgl:
     dependencies: []
     source:
-      path: C:\Users\labuser\SmartWatchForChildSafety-Capstone-Project\DashboardApplication\components\lvgl__lvgl
+      path: C:\Users\BiLKANCOMPUTERS\Desktop\School\CNG492\DashboardApplication\components\lvgl__lvgl
       type: local
     version: 9.2.2
 direct_dependencies:
