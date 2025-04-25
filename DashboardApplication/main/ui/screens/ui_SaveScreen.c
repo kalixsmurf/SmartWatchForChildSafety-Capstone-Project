@@ -17,7 +17,7 @@ void ui_SaveScreen_screen_init(void)
     lv_obj_set_y(ui_Label13, -120);
     lv_obj_set_align(ui_Label13, LV_ALIGN_BOTTOM_MID);
     lv_label_set_text(ui_Label13, "Settings Saved Successfully");
-    lv_obj_set_style_text_font(ui_Label13, &lv_font_montserrat_24, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_Label13, &lv_font_montserrat_14, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_Panel1 = lv_obj_create(ui_SaveScreen);
     lv_obj_set_width(ui_Panel1, 140);

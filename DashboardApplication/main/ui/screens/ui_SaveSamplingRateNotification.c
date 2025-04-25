@@ -17,7 +17,7 @@ void ui_SaveSamplingRateNotification_screen_init(void)
     lv_obj_set_y(ui_Label5, -120);
     lv_obj_set_align(ui_Label5, LV_ALIGN_BOTTOM_MID);
     lv_label_set_text(ui_Label5, "Sampling Rate Selection Saved");
-    lv_obj_set_style_text_font(ui_Label5, &lv_font_montserrat_22, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_Label5, &lv_font_montserrat_12, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_Panel2 = lv_obj_create(ui_SaveSamplingRateNotification);
     lv_obj_set_width(ui_Panel2, 140);

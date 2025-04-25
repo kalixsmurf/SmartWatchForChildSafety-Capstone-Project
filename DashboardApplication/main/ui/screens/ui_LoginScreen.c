@@ -4,6 +4,7 @@
 // Project name: SquareLine_Project
 
 #include "../ui.h"
+#include<string.h>
 
 void ui_LoginScreen_screen_init(void)
 {
@@ -29,7 +30,7 @@ void ui_LoginScreen_screen_init(void)
     lv_obj_set_y(ui_LoginPasswordLabel, -40);
     lv_obj_set_align(ui_LoginPasswordLabel, LV_ALIGN_LEFT_MID);
     lv_label_set_text(ui_LoginPasswordLabel, "Password");
-    lv_obj_set_style_text_font(ui_LoginPasswordLabel, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_LoginPasswordLabel, &lv_font_montserrat_16, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_LoginPasswordTextArea = lv_textarea_create(ui_LoginScreen);
     lv_obj_set_width(ui_LoginPasswordTextArea, 250);
@@ -37,7 +38,7 @@ void ui_LoginScreen_screen_init(void)
     lv_obj_set_x(ui_LoginPasswordTextArea, 50);
     lv_obj_set_y(ui_LoginPasswordTextArea, 0);
     lv_obj_set_align(ui_LoginPasswordTextArea, LV_ALIGN_LEFT_MID);
-    if("abcdefghijklmnopqrstuvwxyz0123456789!+%?-_*" == "") lv_textarea_set_accepted_chars(ui_LoginPasswordTextArea, NULL);
+    if(strcmp("abcdefghijklmnopqrstuvwxyz0123456789!+%?-_*", "")) lv_textarea_set_accepted_chars(ui_LoginPasswordTextArea, NULL);
     else lv_textarea_set_accepted_chars(ui_LoginPasswordTextArea, "abcdefghijklmnopqrstuvwxyz0123456789!+%?-_*");
     lv_textarea_set_max_length(ui_LoginPasswordTextArea, 12);
     lv_textarea_set_placeholder_text(ui_LoginPasswordTextArea, "Enter Password");

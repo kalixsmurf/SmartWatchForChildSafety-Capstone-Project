@@ -4,6 +4,7 @@
 // Project name: SquareLine_Project
 
 #include "../ui.h"
+#include<string.h>
 
 void ui_ProfilePage_screen_init(void)
 {
@@ -19,7 +20,7 @@ void ui_ProfilePage_screen_init(void)
     lv_obj_set_y(ui_ProfileInfoTitleLabel, -140);
     lv_obj_set_align(ui_ProfileInfoTitleLabel, LV_ALIGN_CENTER);
     lv_label_set_text(ui_ProfileInfoTitleLabel, "Profile Information");
-    lv_obj_set_style_text_font(ui_ProfileInfoTitleLabel, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_ProfileInfoTitleLabel, &lv_font_montserrat_16, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_Container2 = lv_obj_create(ui_ProfilePage);
     lv_obj_remove_style_all(ui_Container2);
@@ -42,7 +43,7 @@ void ui_ProfilePage_screen_init(void)
     lv_obj_set_height(ui_PrimaryPhoneNumberInput, 40);
     lv_obj_set_x(ui_PrimaryPhoneNumberInput, 10);
     lv_obj_set_y(ui_PrimaryPhoneNumberInput, 20);
-    if("0123456789+" == "") lv_textarea_set_accepted_chars(ui_PrimaryPhoneNumberInput, NULL);
+    if(strcmp("0123456789+", "")) lv_textarea_set_accepted_chars(ui_PrimaryPhoneNumberInput, NULL);
     else lv_textarea_set_accepted_chars(ui_PrimaryPhoneNumberInput, "0123456789+");
     lv_textarea_set_max_length(ui_PrimaryPhoneNumberInput, 10);
     lv_textarea_set_placeholder_text(ui_PrimaryPhoneNumberInput, "+90");
@@ -59,8 +60,9 @@ void ui_ProfilePage_screen_init(void)
     lv_obj_set_height(ui_SecondaryPhoneNumberInput, 40);
     lv_obj_set_x(ui_SecondaryPhoneNumberInput, 10);
     lv_obj_set_y(ui_SecondaryPhoneNumberInput, 90);
-    if("0123456789+" == "") lv_textarea_set_accepted_chars(ui_SecondaryPhoneNumberInput, NULL);
+    if(strcmp("0123456789+", "") == 0) lv_textarea_set_accepted_chars(ui_SecondaryPhoneNumberInput, NULL);
     else lv_textarea_set_accepted_chars(ui_SecondaryPhoneNumberInput, "0123456789+");
+    
     lv_textarea_set_max_length(ui_SecondaryPhoneNumberInput, 10);
     lv_textarea_set_placeholder_text(ui_SecondaryPhoneNumberInput, "+90");
 
@@ -76,7 +78,7 @@ void ui_ProfilePage_screen_init(void)
     lv_obj_set_height(ui_ProfilePagePasswordInput, 40);
     lv_obj_set_x(ui_ProfilePagePasswordInput, 10);
     lv_obj_set_y(ui_ProfilePagePasswordInput, 160);
-    if("abcdefghijklmnopqrstuvwxyz0123456789!+%?-_*" == "") lv_textarea_set_accepted_chars(ui_ProfilePagePasswordInput,
+    if(strcmp("abcdefghijklmnopqrstuvwxyz0123456789!+%?-_*", "") == 0) lv_textarea_set_accepted_chars(ui_ProfilePagePasswordInput,
                                                                                                NULL);
     else lv_textarea_set_accepted_chars(ui_ProfilePagePasswordInput, "abcdefghijklmnopqrstuvwxyz0123456789!+%?-_*");
     lv_textarea_set_max_length(ui_ProfilePagePasswordInput, 12);

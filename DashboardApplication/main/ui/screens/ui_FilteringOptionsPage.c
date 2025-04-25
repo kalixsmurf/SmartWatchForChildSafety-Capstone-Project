@@ -171,7 +171,7 @@ void ui_FilteringOptionsPage_screen_init(void)
     lv_obj_set_y(ui_Label16, 40);
     lv_obj_set_align(ui_Label16, LV_ALIGN_TOP_MID);
     lv_label_set_text(ui_Label16, "Filtering Options");
-    lv_obj_set_style_text_font(ui_Label16, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_Label16, &lv_font_montserrat_16, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_BackButtonFilterPage = lv_btn_create(ui_FilteringOptionsPage);
     lv_obj_set_width(ui_BackButtonFilterPage, 70);

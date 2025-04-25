@@ -10,11 +10,51 @@
 extern "C" {
 #endif
 
-#include "lvgl/lvgl.h"
+#include "lvgl.h"
 
 #include "ui_helpers.h"
 #include "ui_events.h"
 
+
+// SCREEN: ui_SettingsScreen
+extern lv_obj_t *ui_SettingsScreen;
+extern lv_obj_t *ui_Container6;
+extern lv_obj_t *ui_AppPasswordLabel;
+extern lv_obj_t *ui_AppPasswordText;
+extern lv_obj_t *ui_Parent1Phone;
+extern lv_obj_t *ui_Parent1PhoneText;
+extern lv_obj_t *ui_Parent2Phone;
+extern lv_obj_t *ui_Parent2PhoneText;
+extern lv_obj_t *ui_SaveButton;
+extern lv_obj_t *ui_Label10;
+extern lv_obj_t *ui_BackButton;
+extern lv_obj_t *ui_Label9;
+// CUSTOM VARIABLES
+
+// SCREEN: DASHBOARD SCREEN
+/* LVGL objects */
+extern lv_obj_t *ui_DashboardScreen;
+extern lv_obj_t *ui_SettingsButton;
+extern lv_obj_t *ui_resultTable;
+extern lv_obj_t *ui_header1;
+extern lv_obj_t *ui_header2;
+extern lv_obj_t *ui_header3;
+extern lv_obj_t *ui_tablerow;
+extern lv_obj_t *ui_rowcl1;
+extern lv_obj_t *ui_rowcl2;
+extern lv_obj_t *ui_rowcl3;
+
+/* Event callback */
+void ui_event_SettingsButton(lv_event_t * e);
+
+/* Init function */
+void ui_DashboardScreen_screen_init(void);
+// END OF DASHBOARD SCREEN
+
+// EVENT CALLBACKS
+void ui_event_SaveButton(lv_event_t * e);
+void ui_event_BackButton(lv_event_t * e);
+// END OF EVENT CALLBACKS
 
 // SCREEN: ui_LoginScreen
 void ui_LoginScreen_screen_init(void);
@@ -29,6 +69,16 @@ void ui_event_LoginButton(lv_event_t * e);
 extern lv_obj_t * ui_LoginButton;
 extern lv_obj_t * ui_Label3;
 // CUSTOM VARIABLES
+
+// SCREEN: NOTIFICATION PAGE
+extern lv_obj_t *ui_Notification;
+extern lv_obj_t *ui_Panel1;
+
+void ui_event_Panel1(lv_event_t * e);
+void ui_event_Notification(lv_event_t * e);
+
+void ui_Notification_screen_init(void);
+// END OF NOTIFICATION PAGE
 
 // SCREEN: ui_MainPage
 void ui_MainPage_screen_init(void);
