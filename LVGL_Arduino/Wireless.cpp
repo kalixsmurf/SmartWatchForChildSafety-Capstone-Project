@@ -76,3 +76,48 @@ void Wireless_Test2(){
     0                    
   );
 }
+
+bool ConnectWifi(const char* ssid, const char* password) {
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(ssid, password);
+
+  printf("Connecting to Wi-Fi: %s\n", ssid);
+  unsigned long startAttemptTime = millis();
+
+  while (WiFi.status() != WL_CONNECTED && millis() - startAttemptTime < 10000) {
+    delay(500);
+    printf(".");
+  }
+
+  if (WiFi.status() != WL_CONNECTED) {
+    printf("\nFailed to connect to Wi-Fi\n");
+    return false;
+  }
+
+  printf("\nConnected to Wi-Fi. IP address: %s\n", WiFi.localIP().toString().c_str());
+  return true;
+}
+
+bool SendData(const char* url, const char* jsonPayload) {
+  if (WiFi.status() != WL_CONNECTED) {
+    printf("Wi-Fi not connected!\n");
+    return false;
+  }
+
+  HTTPClient http;
+  http.begin(url);  // e.g., "http://192.168.1.100:5000/api/data"
+  http.addHeader("Content-Type", "application/json");
+
+  int httpResponseCode = http.POST(jsonPayload);
+
+  if (httpResponseCode > 0) {
+    String response = http.getString();
+    printf("HTTP Response code: %d\n", httpResponseCode);
+    printf("Response: %s\n", response.c_str());
+  } else {
+    printf("Error in sending POST request: %s\n", http.errorToString(httpResponseCode).c_str());
+  }
+
+  http.end();
+  return httpResponseCode > 0;
+}

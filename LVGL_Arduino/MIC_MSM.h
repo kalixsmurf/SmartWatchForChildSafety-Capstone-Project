@@ -10,5 +10,5 @@
 #define I2S_PIN_DOUT  -1
 #define I2S_PIN_DIN   39
 
-
+extern I2SClass i2s;
 void MIC_Init(void);

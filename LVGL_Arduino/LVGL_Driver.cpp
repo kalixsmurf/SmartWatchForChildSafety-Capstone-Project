@@ -66,6 +66,7 @@ void example_increase_lvgl_tick(void *arg)
 void Lvgl_Init(void)
 {
   lv_init();
+  
   lv_disp_draw_buf_init( &draw_buf, buf1, buf2, LVGL_BUF_LEN);
 
   /*Initialize the display*/

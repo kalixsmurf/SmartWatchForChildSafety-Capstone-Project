@@ -54,7 +54,7 @@ void Awaken_Event(sr_event_t event, int command_id, int phrase_id) {
         if(ACTIVE_TRACK_CNT)
           _lv_demo_music_resume();   
         else
-          printf("No MP3 file found in SD card!\r\n");    
+          printf("No MP3 file found in SD card!\r\n");
       }
       break;
     case SR_EVENT_COMMAND:
