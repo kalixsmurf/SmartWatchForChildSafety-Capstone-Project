@@ -17,6 +17,7 @@
 #include "esp_psram.h"
 #include "esp_heap_caps.h"
 #include <time.h>
+#include <ArduinoJson.h>
 
 #define SAMPLE_RATE 16000
 #define BITS_PER_SAMPLE 16
@@ -24,17 +25,18 @@
 #define RECORD_SECONDS 10
 #define BUFFER_SIZE 1024
 
-const char* ntpServer = "pool.ntp.org";
-const long gmtOffset_sec = 3 * 3600;  //UTC+3
+const char *ntpServer = "pool.ntp.org";
+const long gmtOffset_sec = 3 * 3600; // UTC+3
 const int daylightOffset_sec = 0;
 
-const char* SSID = "DESKTOP-JQQF5JK";
-const char* PASSWD = ",Er592301";
-const char* ROUTE = "/api/data";
-const char* AUDIOROUTE = "/upload";
+const char *SSID = "DESKTOP-JQQF5JK";
+const char *PASSWD = ",Er592301";
+const char *ROUTE = "/api/data";
+const char *AUDIOROUTE = "/upload";
 uint32_t lastFileHash = 0;
 
-struct SamplingSlot {
+struct SamplingSlot
+{
   int fromMinutes;
   int toMinutes;
   int intervalMinutes;
@@ -44,16 +46,20 @@ std::vector<SamplingSlot> currentSamplingSlots;
 
 TaskHandle_t dynamicRecordingHandle = NULL;
 
-uint32_t calculateFileCRC32(File& file) {
+uint32_t calculateFileCRC32(File &file)
+{
   const size_t bufSize = 512;
   uint8_t buffer[bufSize];
   uint32_t crc = 0xFFFFFFFF;
 
-  while (file.available()) {
+  while (file.available())
+  {
     size_t len = file.read(buffer, bufSize);
-    for (size_t i = 0; i < len; ++i) {
+    for (size_t i = 0; i < len; ++i)
+    {
       crc ^= buffer[i];
-      for (int j = 0; j < 8; j++) {
+      for (int j = 0; j < 8; j++)
+      {
         if (crc & 1)
           crc = (crc >> 1) ^ 0xEDB88320;
         else
@@ -65,29 +71,35 @@ uint32_t calculateFileCRC32(File& file) {
   return ~crc;
 }
 
-int parseTimeStrToMinutes(const String& timeStr) {
+int parseTimeStrToMinutes(const String &timeStr)
+{
   int hour = 0, min = 0;
   sscanf(timeStr.c_str(), "%d:%d", &hour, &min);
   return hour * 60 + min;
 }
 
-void loadSamplingSchedule() {
+void loadSamplingSchedule()
+{
   currentSamplingSlots.clear();
 
   File file = SD_MMC.open("/samplingRateConfig.txt", FILE_READ);
-  if (!file) {
+  if (!file)
+  {
     Serial.println("ERROR: Couldn't open samplingRateConfig.txt");
     return;
   }
 
-  while (file.available()) {
+  while (file.available())
+  {
     String line = file.readStringUntil('\n');
     line.trim();
-    if (line.length() == 0) continue;
+    if (line.length() == 0)
+      continue;
 
     int i1 = line.indexOf(',');
     int i2 = line.indexOf(',', i1 + 1);
-    if (i1 == -1 || i2 == -1) continue;
+    if (i1 == -1 || i2 == -1)
+      continue;
 
     String fromStr = line.substring(0, i1);
     String toStr = line.substring(i1 + 1, i2);
@@ -97,10 +109,14 @@ void loadSamplingSchedule() {
     slot.fromMinutes = parseTimeStrToMinutes(fromStr);
     slot.toMinutes = parseTimeStrToMinutes(toStr);
 
-    if (level.equalsIgnoreCase("low")) slot.intervalMinutes = 30;
-    else if (level.equalsIgnoreCase("medium")) slot.intervalMinutes = 15;
-    else if (level.equalsIgnoreCase("high")) slot.intervalMinutes = 1;
-    else continue;
+    if (level.equalsIgnoreCase("low"))
+      slot.intervalMinutes = 30;
+    else if (level.equalsIgnoreCase("medium"))
+      slot.intervalMinutes = 15;
+    else if (level.equalsIgnoreCase("high"))
+      slot.intervalMinutes = 1;
+    else
+      continue;
 
     currentSamplingSlots.push_back(slot);
   }
@@ -134,7 +150,8 @@ void loadSamplingSchedule() {
   file.write((uint8_t*)&dataSize, 4);
 } */
 
-void recordAudio() {
+void recordAudio()
+{
   Serial.println("Audio recording initializing...");
 
   /* // 1. Calculate total data size
@@ -166,9 +183,11 @@ void recordAudio() {
   Serial.println("Recording complete and saved to /micTest.wav"); */
 }
 
-bool readCredentials(String& primary, String& secondary) {
+bool readCredentials(String &primary, String &secondary)
+{
   File file = SD_MMC.open("/credentials.txt", FILE_READ);
-  if (!file) {
+  if (!file)
+  {
     Serial.println("Failed to open credentials.txt");
     return false;
   }
@@ -181,36 +200,44 @@ bool readCredentials(String& primary, String& secondary) {
   return true;
 }
 
-String readFilteringConfigJSON() {
+String readFilteringConfigJSON()
+{
   File file = SD_MMC.open("/filteringConfig.txt", FILE_READ);
-  if (!file) {
+  if (!file)
+  {
     Serial.println("Failed to open filteringConfig.txt");
     return "{}";
   }
   String json = "\"filters\":{";
-  while (file.available()) {
+  while (file.available())
+  {
     String line = file.readStringUntil('\n');
     line.trim();
     int idx = line.lastIndexOf(',');
-    if (idx == -1) continue;
+    if (idx == -1)
+      continue;
 
     String key = line.substring(0, idx);
     String val = line.substring(idx + 1);
-    key.replace("\"", "\\\"");  // Escape quotes if any
+    key.replace("\"", "\\\""); // Escape quotes if any
     json += "\"" + key + "\":" + val + ",";
   }
   file.close();
 
-  if (json.endsWith(",")) json.remove(json.length() - 1);
+  if (json.endsWith(","))
+    json.remove(json.length() - 1);
   json += "}";
 
   return json;
 }
 
-void dynamicRecordingTask(void* pvParameters) {
-  while (1) {
+void dynamicRecordingTask(void *pvParameters)
+{
+  while (1)
+  {
     // Make sure datetime is valid
-    if (datetime.hour >= 24 || datetime.minute >= 60) {
+    if (datetime.hour >= 24 || datetime.minute >= 60)
+    {
       Serial.println("Invalid datetime; retrying in 1 minute.");
       vTaskDelay(pdMS_TO_TICKS(60000));
       continue;
@@ -221,8 +248,10 @@ void dynamicRecordingTask(void* pvParameters) {
     // Default interval is "medium"
     int delayMinutes = 15;
 
-    for (auto& slot : currentSamplingSlots) {
-      if (nowMins >= slot.fromMinutes && nowMins < slot.toMinutes) {
+    for (auto &slot : currentSamplingSlots)
+    {
+      if (nowMins >= slot.fromMinutes && nowMins < slot.toMinutes)
+      {
         delayMinutes = slot.intervalMinutes;
         break;
       }
@@ -230,7 +259,7 @@ void dynamicRecordingTask(void* pvParameters) {
 
     Serial.printf("Recording now. Next recording in %d minutes.\n", delayMinutes);
 
-    //recordAudio();
+    // recordAudio();
     Serial.printf("Recording done\n");
     sendAudio();
 
@@ -238,11 +267,15 @@ void dynamicRecordingTask(void* pvParameters) {
   }
 }
 
-void sendAudio() {
-  String url = "http://" + WiFi.gatewayIP().toString() + ":12000" + ROUTE;
-  if (WiFi.status() != WL_CONNECTED) {
+void sendAudio()
+{
+  String url = "http://" + WiFi.gatewayIP().toString() + ":12000" + AUDIOROUTE;
+  if (WiFi.status() != WL_CONNECTED)
+  {
     Serial.println("WiFi not connected.");
-  } else {
+  }
+  else
+  {
     WiFiClient client;
     HTTPClient http;
     File wavFile;
@@ -254,9 +287,12 @@ void sendAudio() {
     http.addHeader("Content-Type", "audio/wav");
 
     wavFile = SD_MMC.open("/myfile.wav", FILE_READ);
-    if (!wavFile) {
-      Serial.println("ERROR: failed to open /micTest.wav");
-    } else {
+    if (!wavFile)
+    {
+      Serial.println("ERROR: failed to open /myfile.wav");
+    }
+    else
+    {
       fileSize = wavFile.size();
       Serial.printf("Sending WAV file, size: %u bytes\n", fileSize);
 
@@ -264,21 +300,43 @@ void sendAudio() {
       code = http.sendRequest("POST", &wavFile, fileSize);
       Serial.printf("[HTTP] POST code: %d\n", code);
 
-      if (code > 0) {
+      if (code > 0)
+      {
         String response = http.getString();
         Serial.println("Response payload:");
         Serial.println(response);
+        StaticJsonDocument<256> doc;
+        DeserializationError error = deserializeJson(doc, response);
+
+        if (error)
+        {
+          Serial.print("JSON parse failed: ");
+          Serial.println(error.c_str());
+          return;
+        }
+
+        const char *emotion = doc["emotion_prediction"];
+        int age = doc["age_prediction"];
+        const char *timestamp = doc["timestamp"];
+
+        Serial.printf("Emotion: %s\n", emotion);
+        Serial.printf("Age: %d\n", age);
+        Serial.printf("Timestamp: %s\n", timestamp);
       }
+
       wavFile.close();
     }
-    http.end();  // always close the connection
+    http.end(); // always close the connection
   }
 }
 
-void sendConfig() {
-  if (WiFi.status() == WL_CONNECTED) {
+void sendConfig()
+{
+  if (WiFi.status() == WL_CONNECTED)
+  {
     String primary, secondary;
-    if (!readCredentials(primary, secondary)) return;
+    if (!readCredentials(primary, secondary))
+      return;
 
     String filtersJson = readFilteringConfigJSON();
 
@@ -302,17 +360,23 @@ void sendConfig() {
     if (code > 0)
       Serial.println(http.getString());
 
-    http.end();  // VERY important!
-  } else {
+    http.end(); // VERY important!
+  }
+  else
+  {
     Serial.println("WiFi not connected.");
   }
 }
 
-void sendDataTask(void* pvParameters) {
-  while (1) {
-    if (WiFi.status() == WL_CONNECTED) {
+void sendDataTask(void *pvParameters)
+{
+  while (1)
+  {
+    if (WiFi.status() == WL_CONNECTED)
+    {
       String primary, secondary;
-      if (!readCredentials(primary, secondary)) return;
+      if (!readCredentials(primary, secondary))
+        return;
 
       String filtersJson = readFilteringConfigJSON();
 
@@ -336,36 +400,46 @@ void sendDataTask(void* pvParameters) {
       if (code > 0)
         Serial.println(http.getString());
 
-      http.end();  // VERY important!
-    } else {
+      http.end(); // VERY important!
+    }
+    else
+    {
       Serial.println("WiFi not connected.");
     }
 
-    vTaskDelay(pdMS_TO_TICKS(5000));  // for debugging, reduce interval
+    vTaskDelay(pdMS_TO_TICKS(5000)); // for debugging, reduce interval
   }
 }
 
-void configWatcherTask(void* param) {
-  while (1) {
+void configWatcherTask(void *param)
+{
+  while (1)
+  {
     File f = SD_MMC.open("/samplingRateConfig.txt", FILE_READ);
-    if (f) {
+    if (f)
+    {
       uint32_t currentHash = calculateFileCRC32(f);
-      if (currentHash != lastFileHash) {
+      if (currentHash != lastFileHash)
+      {
         Serial.println("Detected change in samplingRateConfig.txt.");
         lastFileHash = currentHash;
         RestartDynamicRecordingTask();
       }
       f.close();
-    } else {
+    }
+    else
+    {
       Serial.println("Failed to open samplingRateConfig.txt for monitoring.");
     }
 
-    vTaskDelay(pdMS_TO_TICKS(10000));  // Check every 10 sec
+    vTaskDelay(pdMS_TO_TICKS(10000)); // Check every 10 sec
   }
 }
 
-void RestartDynamicRecordingTask() {
-  if (dynamicRecordingHandle) {
+void RestartDynamicRecordingTask()
+{
+  if (dynamicRecordingHandle)
+  {
     vTaskDelete(dynamicRecordingHandle);
     dynamicRecordingHandle = NULL;
     Serial.println("Old recording task killed.");
@@ -374,37 +448,41 @@ void RestartDynamicRecordingTask() {
   loadSamplingSchedule();
 
   xTaskCreatePinnedToCore(
-    dynamicRecordingTask,
-    "DynamicRecording",
-    8192,
-    NULL,
-    1,
-    &dynamicRecordingHandle,
-    0  // Core 0
+      dynamicRecordingTask,
+      "DynamicRecording",
+      8192,
+      NULL,
+      1,
+      &dynamicRecordingHandle,
+      0 // Core 0
   );
 
   Serial.println("Recording task restarted.");
 }
 
-void rtcDriverTask(void* param) {
-  while (true) {
-    PCF85063_Read_Time(&datetime);    // Update global datetime for UI
-    vTaskDelay(pdMS_TO_TICKS(1000));  // Update every 1 sec
+void rtcDriverTask(void *param)
+{
+  while (true)
+  {
+    PCF85063_Read_Time(&datetime);   // Update global datetime for UI
+    vTaskDelay(pdMS_TO_TICKS(1000)); // Update every 1 sec
   }
 }
 
-void Driver_Init() {
+void Driver_Init()
+{
   Flash_test();
   PWR_Init();
   BAT_Init();
   I2C_Init();
   TCA9554PWR_Init(0x00);
   Backlight_Init();
-  Set_Backlight(50);  //0~100
+  Set_Backlight(50); // 0~100
   PCF85063_Init();
-  //QMI8658_Init();
+  // QMI8658_Init();
 }
-void setup() {
+void setup()
+{
   Serial.begin(115200);
 
   // Check PSRAM
@@ -414,13 +492,15 @@ void setup() {
 
   WiFi.begin(SSID, PASSWD);
 
-  while (WiFi.status() != WL_CONNECTED) {
+  while (WiFi.status() != WL_CONNECTED)
+  {
     delay(500);
   }
 
   configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
   struct tm timeinfo;
-  if (getLocalTime(&timeinfo)) {
+  if (getLocalTime(&timeinfo))
+  {
     datetime.year = timeinfo.tm_year + 1900;
     datetime.month = timeinfo.tm_mon + 1;
     datetime.day = timeinfo.tm_mday;
@@ -436,42 +516,43 @@ void setup() {
   Driver_Init();
 
   SD_Init();
-  //Audio_Init();
-  //MIC_Init();
+  // Audio_Init();
+  // MIC_Init();
   LCD_Init();
   Lvgl_Init();
 
   ui_init();
 
-
   RestartDynamicRecordingTask();
   sendConfig();
   File f = SD.open("/samplingRateConfig.txt", FILE_READ);
-  if (f) {
+  if (f)
+  {
     lastFileHash = calculateFileCRC32(f);
     f.close();
   }
 
   xTaskCreatePinnedToCore(
-    configWatcherTask,
-    "ConfigWatcher",
-    4096,
-    NULL,
-    1,
-    NULL,
-    0  // Core 0
+      configWatcherTask,
+      "ConfigWatcher",
+      4096,
+      NULL,
+      1,
+      NULL,
+      0 // Core 0
   );
   xTaskCreatePinnedToCore(
-    rtcDriverTask,
-    "RTC Driver",
-    2048,
-    NULL,
-    1,
-    NULL,
-    0  // Core 0
+      rtcDriverTask,
+      "RTC Driver",
+      2048,
+      NULL,
+      1,
+      NULL,
+      0 // Core 0
   );
 }
-void loop() {
+void loop()
+{
   Lvgl_Loop();
   vTaskDelay(pdMS_TO_TICKS(5));
 }
