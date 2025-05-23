@@ -4,6 +4,7 @@ import joblib
 import numpy as np
 import librosa
 from datetime import datetime
+import json
 
 # Load the trained model for emotion detection
 with open('emotion_model.joblib', 'rb') as file:
@@ -13,7 +14,7 @@ with open('age_model.joblib', 'rb') as file:
     age_model = joblib.load(file)
 
 app = Flask(__name__)
-UPLOAD_FOLDER = "C:\\Users\\hayaa\\Desktop"
+UPLOAD_FOLDER = "C:\\Users\\MOON-\\Downloads\\recorder"
 
 @app.route('/api/data', methods=['POST'])
 def receive_data():
@@ -51,8 +52,8 @@ def receive_data():
         file.write(f"Gender:{gender}")
         file.write(f"Age Group :{age_groups}")
         file.write(f"Emotion:{emotions}")
-
-
+    return jsonify({"status": "success"}), 200
+    
 # @app.route('/upload', methods=['POST'])
 # def upload_file():
 #     print("entered upload file")
@@ -89,11 +90,12 @@ def startPrediction(file_path):
         feature_2d = np.array([feature])  # Convert to 2D array
         emotion_prediction = emotion_model.predict(feature_2d)
         age_prediction = age_model.predict(feature_2d)
+        gender_prediction = gender_model.predict(feature_2d)
         # Get current time
         current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-        print(f"Emotion Prediction: {emotion_prediction[0]}, Age Prediction: {age_prediction[0]}, Timestamp: {current_time}")  # Debug print
-        return jsonify({"emotion_prediction": emotion_prediction[0],"age_prediction": age_prediction[0],"timestamp": current_time})
+        print(f"Emotion Prediction: {emotion_prediction[0]}, Gender Prediction: {gender_prediction[0]}, Age Prediction: {age_prediction[0]}, Timestamp: {current_time}")  # Debug print
+        return jsonify({"emotion_prediction": emotion_prediction[0],"gender_prediction": gender_prediction[0],"age_prediction": age_prediction[0],"timestamp": current_time})
     else:
         return jsonify({"error": "Feature extraction failed"}), 400
 
@@ -116,5 +118,5 @@ def extract_feature(file_name, mfcc=True):
         print(f"Error processing file {file_name}: {e}")  # Debug print
         return None
     
-if __name__ == '__main__':
+if __name__ == '_main_':
     app.run(host='127.0.0.1', port=12000)
