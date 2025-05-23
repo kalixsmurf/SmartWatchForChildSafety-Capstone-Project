@@ -318,16 +318,118 @@ void sendAudio()
         const char *emotion = doc["emotion_prediction"];
         int age = doc["age_prediction"];
         const char *timestamp = doc["timestamp"];
+        // the following part is missing
+        const char *gender = doc["gender_prediction"];
+        const char *result = check_filter_and_results(emotion, age, gender);
+
+        // add call GSM function if result is ANOMALI
 
         Serial.printf("Emotion: %s\n", emotion);
         Serial.printf("Age: %d\n", age);
         Serial.printf("Timestamp: %s\n", timestamp);
-      }
 
+        load_table_data(emotion, age, gender, timestamp, result)
+      }
       wavFile.close();
     }
     http.end(); // always close the connection
   }
+}
+// load the results to user interface table
+void load_table_data(const char *timestamp, int age, const char *gender, const char *emotion, const char *result)
+{
+  File file = SD_MMC.open("/results.txt", FILE_APPEND);
+  if (!file)
+  {
+    Serial.println("Failed to open file for appending");
+    return;
+  }
+  file.printf("%s,%d,%s,%s,%s\n", timestamp, age, gender, emotion, result);
+  file.close();
+  Serial.println("Appended new prediction data.");
+}
+// compare the ml results with the filters selected by parents
+const char *check_filter_and_results(int ageResult, const char *genderResult, const char *emotionResult)
+{
+  struct UIState
+  {
+    bool MaleChecked;
+    bool FemaleChecked;
+
+    bool AngryChecked;
+    bool SadChecked;
+    bool NeutralChecked;
+    bool CalmChecked;
+    bool HappyChecked;
+    bool FearChecked;
+    bool DisgustChecked;
+    bool SurprisedChecked;
+
+    bool TwentyChecked;
+    bool ThirtyChecked;
+    bool FortyChecked;
+    bool FiftyChecked;
+    bool SixtyChecked;
+    bool SeventyChecked;
+    bool EightyChecked;
+  };
+
+  UIState state = {};
+
+  state.MaleChecked = lv_obj_has_state(ui_MaleCheckbox, LV_STATE_CHECKED);
+  state.FemaleChecked = lv_obj_has_state(ui_FemaleCheckbox, LV_STATE_CHECKED);
+
+  state.AngryChecked = lv_obj_has_state(ui_AngryCheckBox, LV_STATE_CHECKED);
+  state.SadChecked = lv_obj_has_state(ui_SadCheckBox, LV_STATE_CHECKED);
+  state.NeutralChecked = lv_obj_has_state(ui_NeutralCheckBox, LV_STATE_CHECKED);
+  state.CalmChecked = lv_obj_has_state(ui_CalmCheckBox, LV_STATE_CHECKED);
+  state.HappyChecked = lv_obj_has_state(ui_HappyCheckBox, LV_STATE_CHECKED);
+  state.FearChecked = lv_obj_has_state(ui_FearCheckBox, LV_STATE_CHECKED);
+  state.DisgustChecked = lv_obj_has_state(ui_DisgustCheckBox, LV_STATE_CHECKED);
+  state.SurprisedChecked = lv_obj_has_state(ui_SurprizedCheckBox, LV_STATE_CHECKED);
+
+  state.TwentyChecked = lv_obj_has_state(ui_twentyCheckbox, LV_STATE_CHECKED);
+  state.ThirtyChecked = lv_obj_has_state(ui_thirtyCheckbox, LV_STATE_CHECKED);
+  state.FortyChecked = lv_obj_has_state(ui_fortyCheckbox, LV_STATE_CHECKED);
+  state.FiftyChecked = lv_obj_has_state(ui_fiftyCheckbox, LV_STATE_CHECKED);
+  state.SixtyChecked = lv_obj_has_state(ui_sixtyCheckbox, LV_STATE_CHECKED);
+  state.SeventyChecked = lv_obj_has_state(ui_seventyCheckbox, LV_STATE_CHECKED);
+  state.EightyChecked = lv_obj_has_state(ui_eightyCheckbox, LV_STATE_CHECKED);
+
+  int anomaliScore = 0;
+
+  if ((ageResult == "twenties" && state.TwentyChecked) ||
+      (ageResult == "thirties" && state.ThirtyChecked) ||
+      (ageResult == "forties" && state.FortyChecked) ||
+      (ageResult == "fifties" && state.FiftyChecked) ||
+      (ageResult == "sixties" && state.SixtyChecked) ||
+      (ageResult == "seventies" && state.SeventyChecked) ||
+      (ageResult == "eighties" && state.EightyChecked))
+  {
+    anomaliScore++;
+  }
+
+  if ((strcmp(genderResult, "Male") == 0 && state.MaleChecked) ||
+      (strcmp(genderResult, "Female") == 0 && state.FemaleChecked))
+  {
+    anomaliScore++;
+  }
+
+  if ((strcmp(emotionResult, "happy") == 0 && state.HappyChecked) ||
+      (strcmp(emotionResult, "fear") == 0 && state.FearChecked) ||
+      (strcmp(emotionResult, "angry") == 0 && state.AngryChecked) ||
+      (strcmp(emotionResult, "sad") == 0 && state.SadChecked) ||
+      (strcmp(emotionResult, "neutral") == 0 && state.NeutralChecked) ||
+      (strcmp(emotionResult, "calm") == 0 && state.CalmChecked) ||
+      (strcmp(emotionResult, "disgust") == 0 && state.DisgustChecked) ||
+      (strcmp(emotionResult, "surprised") == 0 && state.SurprisedChecked))
+  {
+    dangerScore++;
+  }
+  if (anomaliScore==3){
+    return "ANOMALI"
+  }
+  return "NORMAL";
 }
 
 void sendConfig()

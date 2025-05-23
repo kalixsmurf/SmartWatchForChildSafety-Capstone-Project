@@ -89,11 +89,12 @@ def startPrediction(file_path):
         feature_2d = np.array([feature])  # Convert to 2D array
         emotion_prediction = emotion_model.predict(feature_2d)
         age_prediction = age_model.predict(feature_2d)
+        gender_prediction = gender_model.predict(feature_2d)
         # Get current time
         current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-        print(f"Emotion Prediction: {emotion_prediction[0]}, Age Prediction: {age_prediction[0]}, Timestamp: {current_time}")  # Debug print
-        return jsonify({"emotion_prediction": emotion_prediction[0],"age_prediction": age_prediction[0],"timestamp": current_time})
+        print(f"Emotion Prediction: {emotion_prediction[0]}, Gender Prediction: {gender_prediction[0]}, Age Prediction: {age_prediction[0]}, Timestamp: {current_time}")  # Debug print
+        return jsonify({"emotion_prediction": emotion_prediction[0],"gender_prediction": gender_prediction[0],"age_prediction": age_prediction[0],"timestamp": current_time})
     else:
         return jsonify({"error": "Feature extraction failed"}), 400
 
