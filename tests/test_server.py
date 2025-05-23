@@ -131,6 +131,7 @@ class TestExtractFeature(unittest.TestCase):
         features = extract_feature("dummy.wav", mfcc=True)
         self.assertIsNotNone(features)
         self.assertEqual(features.shape[0], 40)
+        #hello
 
     def test_extract_feature_error_handling(self):
         features = extract_feature("non_existent_file.wav", mfcc=True)
