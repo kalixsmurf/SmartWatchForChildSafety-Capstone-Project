@@ -316,7 +316,7 @@ void sendAudio()
         }
 
         const char *emotion = doc["emotion_prediction"];
-        int age = doc["age_prediction"];
+        const char *age = doc["age_prediction"];
         const char *timestamp = doc["timestamp"];
         // the following part is missing
         const char *gender = doc["gender_prediction"];
@@ -325,10 +325,10 @@ void sendAudio()
         // add call GSM function if result is ANOMALI
 
         Serial.printf("Emotion: %s\n", emotion);
-        Serial.printf("Age: %d\n", age);
+        Serial.printf("Age: %s\n", age);
         Serial.printf("Timestamp: %s\n", timestamp);
 
-        load_table_data(emotion, age, gender, timestamp, result)
+        load_table_data(emotion, age, gender, timestamp, result);
       }
       wavFile.close();
     }
@@ -336,7 +336,7 @@ void sendAudio()
   }
 }
 // load the results to user interface table
-void load_table_data(const char *timestamp, int age, const char *gender, const char *emotion, const char *result)
+void load_table_data(const char *timestamp, const char * age, const char *gender, const char *emotion, const char *result)
 {
   File file = SD_MMC.open("/results.txt", FILE_APPEND);
   if (!file)
@@ -344,12 +344,12 @@ void load_table_data(const char *timestamp, int age, const char *gender, const c
     Serial.println("Failed to open file for appending");
     return;
   }
-  file.printf("%s,%d,%s,%s,%s\n", timestamp, age, gender, emotion, result);
+  file.printf("%s,%s,%s,%s,%s\n", timestamp, age, gender, emotion, result);
   file.close();
   Serial.println("Appended new prediction data.");
 }
 // compare the ml results with the filters selected by parents
-const char *check_filter_and_results(int ageResult, const char *genderResult, const char *emotionResult)
+const char *check_filter_and_results( const char *emotionResult, const char * ageResult, const char *genderResult)
 {
   struct UIState
   {
@@ -424,10 +424,10 @@ const char *check_filter_and_results(int ageResult, const char *genderResult, co
       (strcmp(emotionResult, "disgust") == 0 && state.DisgustChecked) ||
       (strcmp(emotionResult, "surprised") == 0 && state.SurprisedChecked))
   {
-    dangerScore++;
+    anomaliScore++;
   }
   if (anomaliScore==3){
-    return "ANOMALI"
+    return "ANOMALI";
   }
   return "NORMAL";
 }
