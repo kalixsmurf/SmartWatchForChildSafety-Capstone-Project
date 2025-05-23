@@ -1,3 +1,7 @@
+import sys
+print(sys.path)
+
+
 import unittest
 import json
 import os

@@ -13,7 +13,7 @@ with open('age_model.joblib', 'rb') as file:
     age_model = joblib.load(file)
 
 app = Flask(__name__)
-UPLOAD_FOLDER = "C:\Users\nazli\OneDrive\Desktop\Recorder"
+UPLOAD_FOLDER = r"C:\Users\nazli\OneDrive\Desktop\Recorder"
 
 @app.route('/api/data', methods=['POST'])
 def receive_data():
