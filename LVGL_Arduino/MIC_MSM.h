@@ -3,6 +3,7 @@
 #include "ESP_I2S.h"
 #include "esp_task_wdt.h"
 #include "esp_system.h"
+#include <ESP_SR.h>
 
 #define I2S_PIN_BCK   15
 #define I2S_PIN_WS    2

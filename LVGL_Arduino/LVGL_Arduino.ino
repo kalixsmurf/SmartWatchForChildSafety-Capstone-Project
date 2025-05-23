@@ -36,8 +36,8 @@ const char* ntpServer = "pool.ntp.org";
 const long gmtOffset_sec = 3 * 3600;  //UTC+3
 const int daylightOffset_sec = 0;
 
-const char* SSID = "DESKTOP-JQQF5JK";
-const char* PASSWD = ",Er592301";
+const char* SSID = "powerpuffgirls";
+const char* PASSWD = "powerpuffgirls";
 const char* ROUTE = "/api/data";
 const char* UPLOAD = "/upload";
 uint32_t lastFileHash = 0;
@@ -208,9 +208,6 @@ void recordAudio() {
       pcm24[0] = (sample >> 8) & 0xFF;
       pcm24[1] = (sample >> 16) & 0xFF;
       pcm24[2] = (sample >> 24) & 0xFF;
-      //pcm24[0] = sample & 0xFF;
-      //pcm24[1] = (sample >> 8) & 0xFF;
-      //pcm24[2] = (sample >> 16) & 0xFF;
       wavFile.write(pcm24, 3);
       totalBytesWritten += 3;
     }
@@ -251,7 +248,9 @@ void recordAudio() {
 }
 
 void sendAudio() {
-  String url = "http://" + WiFi.gatewayIP().toString() + ":12000" + UPLOAD;
+  String url = "http://192.168.137.194:12000/upload";
+
+  //String url = "http://" + WiFi.gatewayIP().toString() + ":12000" + UPLOAD;
   if (WiFi.status() != WL_CONNECTED) {
     Serial.println("WiFi not connected.");
     return;
@@ -290,14 +289,23 @@ void sendAudio() {
   String footer = "\r\n--" + boundary + "--\r\n";
   
   size_t totalLength = header.length() + fileSize + footer.length();
+
+  client.connect("192.168.137.194", 12000);  // Remove http://
+
+// Send HTTP POST request headers
+client.print("POST /upload HTTP/1.1\r\n");
+client.print("Host: 192.168.137.194\r\n");
+client.print("Content-Type: " + contentType + "\r\n");
+client.print("Content-Length: " + String(totalLength) + "\r\n");
+client.print("\r\n");
   
   // Start the request
-  client.connect(WiFi.gatewayIP(), 12000);
+  /*client.connect("http://192.168.137.194", 12000);
   client.print("POST " + String(UPLOAD) + " HTTP/1.1\r\n");
-  client.print("Host: " + WiFi.gatewayIP().toString() + ":12000\r\n");
+  client.print("Host:http://192.168.137.194:12000\r\n");
   client.print("Content-Type: " + contentType + "\r\n");
-  client.print("Content-Length: " + String(totalLength) + "\r\n");
-  client.print("\r\n");
+  
+  client.print("\r\n");*/
   
   // Send multipart header
   client.print(header);
@@ -676,7 +684,7 @@ void sendConfig() {
 
     WiFiClient client;
     HTTPClient http;
-    String url = "http://" + WiFi.gatewayIP().toString() + ":12000" + ROUTE;
+    String url = "http://192.168.137.194:12000/api/data";
     http.begin(client, url.c_str());
     http.addHeader("Content-Type", "application/json");
     Serial.printf("Target URL: %s\n", url.c_str());
