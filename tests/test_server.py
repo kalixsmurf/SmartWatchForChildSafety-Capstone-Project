@@ -1,7 +1,10 @@
 import unittest
 import json
 import os
-from server import app
+import flask
+from server import app, extract_feature
+from unittest.mock import patch
+import numpy as np
 
 class TestServerAPI(unittest.TestCase):
     def setUp(self):
@@ -114,6 +117,20 @@ class TestServerAPI(unittest.TestCase):
             content_type='application/json'
         )
         self.assertEqual(response.status_code, 400)
+
+class TestExtractFeature(unittest.TestCase):
+    @patch('server.librosa.load')
+    @patch('server.librosa.feature.mfcc')
+    def test_extract_feature_mfcc(self, mock_mfcc, mock_load):
+        mock_load.return_value = (np.random.rand(1000), 22050)
+        mock_mfcc.return_value = np.random.rand(50, 40)
+        features = extract_feature("dummy.wav", mfcc=True)
+        self.assertIsNotNone(features)
+        self.assertEqual(features.shape[0], 40)
+
+    def test_extract_feature_error_handling(self):
+        features = extract_feature("non_existent_file.wav", mfcc=True)
+        self.assertIsNone(features)
 
 if __name__ == '__main__':
     unittest.main()
