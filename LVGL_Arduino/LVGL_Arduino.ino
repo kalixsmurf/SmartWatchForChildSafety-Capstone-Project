@@ -17,6 +17,7 @@
 #include "esp_psram.h"
 #include "esp_heap_caps.h"
 #include <time.h>
+#include <ArduinoJson.h>
 #include "ESP_I2S.h"
 
 #define SAMPLE_RATE      44100
@@ -32,8 +33,15 @@
 
 I2SClass i2s;
 
-const char* ntpServer = "pool.ntp.org";
-const long gmtOffset_sec = 3 * 3600;  //UTC+3
+#define I2S_PIN_BCK   15
+#define I2S_PIN_WS    2
+#define I2S_PIN_DOUT  -1    // Not used for recording
+#define I2S_PIN_DIN   39    // Microphone data input
+
+I2SClass i2s;
+
+const char *ntpServer = "pool.ntp.org";
+const long gmtOffset_sec = 3 * 3600; // UTC+3
 const int daylightOffset_sec = 0;
 
 const char* SSID = "powerpuffgirls";
@@ -42,7 +50,8 @@ const char* ROUTE = "/api/data";
 const char* UPLOAD = "/upload";
 uint32_t lastFileHash = 0;
 
-struct SamplingSlot {
+struct SamplingSlot
+{
   int fromMinutes;
   int toMinutes;
   int intervalMinutes;
@@ -52,16 +61,20 @@ std::vector<SamplingSlot> currentSamplingSlots;
 
 TaskHandle_t dynamicRecordingHandle = NULL;
 
-uint32_t calculateFileCRC32(File& file) {
+uint32_t calculateFileCRC32(File &file)
+{
   const size_t bufSize = 512;
   uint8_t buffer[bufSize];
   uint32_t crc = 0xFFFFFFFF;
 
-  while (file.available()) {
+  while (file.available())
+  {
     size_t len = file.read(buffer, bufSize);
-    for (size_t i = 0; i < len; ++i) {
+    for (size_t i = 0; i < len; ++i)
+    {
       crc ^= buffer[i];
-      for (int j = 0; j < 8; j++) {
+      for (int j = 0; j < 8; j++)
+      {
         if (crc & 1)
           crc = (crc >> 1) ^ 0xEDB88320;
         else
@@ -73,29 +86,35 @@ uint32_t calculateFileCRC32(File& file) {
   return ~crc;
 }
 
-int parseTimeStrToMinutes(const String& timeStr) {
+int parseTimeStrToMinutes(const String &timeStr)
+{
   int hour = 0, min = 0;
   sscanf(timeStr.c_str(), "%d:%d", &hour, &min);
   return hour * 60 + min;
 }
 
-void loadSamplingSchedule() {
+void loadSamplingSchedule()
+{
   currentSamplingSlots.clear();
 
   File file = SD_MMC.open("/samplingRateConfig.txt", FILE_READ);
-  if (!file) {
+  if (!file)
+  {
     Serial.println("ERROR: Couldn't open samplingRateConfig.txt");
     return;
   }
 
-  while (file.available()) {
+  while (file.available())
+  {
     String line = file.readStringUntil('\n');
     line.trim();
-    if (line.length() == 0) continue;
+    if (line.length() == 0)
+      continue;
 
     int i1 = line.indexOf(',');
     int i2 = line.indexOf(',', i1 + 1);
-    if (i1 == -1 || i2 == -1) continue;
+    if (i1 == -1 || i2 == -1)
+      continue;
 
     String fromStr = line.substring(0, i1);
     String toStr = line.substring(i1 + 1, i2);
@@ -105,10 +124,14 @@ void loadSamplingSchedule() {
     slot.fromMinutes = parseTimeStrToMinutes(fromStr);
     slot.toMinutes = parseTimeStrToMinutes(toStr);
 
-    if (level.equalsIgnoreCase("low")) slot.intervalMinutes = 30;
-    else if (level.equalsIgnoreCase("medium")) slot.intervalMinutes = 15;
-    else if (level.equalsIgnoreCase("high")) slot.intervalMinutes = 1;
-    else continue;
+    if (level.equalsIgnoreCase("low"))
+      slot.intervalMinutes = 30;
+    else if (level.equalsIgnoreCase("medium"))
+      slot.intervalMinutes = 15;
+    else if (level.equalsIgnoreCase("high"))
+      slot.intervalMinutes = 1;
+    else
+      continue;
 
     currentSamplingSlots.push_back(slot);
   }
@@ -596,9 +619,11 @@ void testMicrophoneSettings() {
   setupI2S();
 }
 
-bool readCredentials(String& primary, String& secondary) {
+bool readCredentials(String &primary, String &secondary)
+{
   File file = SD_MMC.open("/credentials.txt", FILE_READ);
-  if (!file) {
+  if (!file)
+  {
     Serial.println("Failed to open credentials.txt");
     return false;
   }
@@ -611,36 +636,44 @@ bool readCredentials(String& primary, String& secondary) {
   return true;
 }
 
-String readFilteringConfigJSON() {
+String readFilteringConfigJSON()
+{
   File file = SD_MMC.open("/filteringConfig.txt", FILE_READ);
-  if (!file) {
+  if (!file)
+  {
     Serial.println("Failed to open filteringConfig.txt");
     return "{}";
   }
   String json = "\"filters\":{";
-  while (file.available()) {
+  while (file.available())
+  {
     String line = file.readStringUntil('\n');
     line.trim();
     int idx = line.lastIndexOf(',');
-    if (idx == -1) continue;
+    if (idx == -1)
+      continue;
 
     String key = line.substring(0, idx);
     String val = line.substring(idx + 1);
-    key.replace("\"", "\\\"");  // Escape quotes if any
+    key.replace("\"", "\\\""); // Escape quotes if any
     json += "\"" + key + "\":" + val + ",";
   }
   file.close();
 
-  if (json.endsWith(",")) json.remove(json.length() - 1);
+  if (json.endsWith(","))
+    json.remove(json.length() - 1);
   json += "}";
 
   return json;
 }
 
-void dynamicRecordingTask(void* pvParameters) {
-  while (1) {
+void dynamicRecordingTask(void *pvParameters)
+{
+  while (1)
+  {
     // Make sure datetime is valid
-    if (datetime.hour >= 24 || datetime.minute >= 60) {
+    if (datetime.hour >= 24 || datetime.minute >= 60)
+    {
       Serial.println("Invalid datetime; retrying in 1 minute.");
       vTaskDelay(pdMS_TO_TICKS(60000));
       continue;
@@ -651,8 +684,10 @@ void dynamicRecordingTask(void* pvParameters) {
     // Default interval is "medium"
     int delayMinutes = 15;
 
-    for (auto& slot : currentSamplingSlots) {
-      if (nowMins >= slot.fromMinutes && nowMins < slot.toMinutes) {
+    for (auto &slot : currentSamplingSlots)
+    {
+      if (nowMins >= slot.fromMinutes && nowMins < slot.toMinutes)
+      {
         delayMinutes = slot.intervalMinutes;
         break;
       }
@@ -668,10 +703,178 @@ void dynamicRecordingTask(void* pvParameters) {
   }
 }
 
-void sendConfig() {
-  if (WiFi.status() == WL_CONNECTED) {
+void sendAudio()
+{
+  String url = "http://" + WiFi.gatewayIP().toString() + ":12000" + AUDIOROUTE;
+  if (WiFi.status() != WL_CONNECTED)
+  {
+    Serial.println("WiFi not connected.");
+  }
+  else
+  {
+    WiFiClient client;
+    HTTPClient http;
+    File wavFile;
+    size_t fileSize;
+    int code;
+
+    Serial.printf("Sending audio file to %s\n", url.c_str());
+    http.begin(client, url.c_str());
+    http.addHeader("Content-Type", "audio/wav");
+
+    wavFile = SD_MMC.open("/myfile.wav", FILE_READ);
+    if (!wavFile)
+    {
+      Serial.println("ERROR: failed to open /myfile.wav");
+    }
+    else
+    {
+      fileSize = wavFile.size();
+      Serial.printf("Sending WAV file, size: %u bytes\n", fileSize);
+
+      // sendRequest has an overload that takes a Stream*
+      code = http.sendRequest("POST", &wavFile, fileSize);
+      Serial.printf("[HTTP] POST code: %d\n", code);
+
+      if (code > 0)
+      {
+        String response = http.getString();
+        Serial.println("Response payload:");
+        Serial.println(response);
+        StaticJsonDocument<256> doc;
+        DeserializationError error = deserializeJson(doc, response);
+
+        if (error)
+        {
+          Serial.print("JSON parse failed: ");
+          Serial.println(error.c_str());
+          return;
+        }
+
+        const char *emotion = doc["emotion_prediction"];
+        const char *age = doc["age_prediction"];
+        const char *timestamp = doc["timestamp"];
+        // the following part is missing
+        const char *gender = doc["gender_prediction"];
+        const char *result = check_filter_and_results(emotion, age, gender);
+
+        // add call GSM function if result is ANOMALI
+
+        Serial.printf("Emotion: %s\n", emotion);
+        Serial.printf("Age: %s\n", age);
+        Serial.printf("Timestamp: %s\n", timestamp);
+
+        load_table_data(emotion, age, gender, timestamp, result);
+      }
+      wavFile.close();
+    }
+    http.end(); // always close the connection
+  }
+}
+// load the results to user interface table
+void load_table_data(const char *timestamp, const char * age, const char *gender, const char *emotion, const char *result)
+{
+  File file = SD_MMC.open("/results.txt", FILE_APPEND);
+  if (!file)
+  {
+    Serial.println("Failed to open file for appending");
+    return;
+  }
+  file.printf("%s,%s,%s,%s,%s\n", timestamp, age, gender, emotion, result);
+  file.close();
+  Serial.println("Appended new prediction data.");
+}
+// compare the ml results with the filters selected by parents
+const char *check_filter_and_results( const char *emotionResult, const char * ageResult, const char *genderResult)
+{
+  struct UIState
+  {
+    bool MaleChecked;
+    bool FemaleChecked;
+
+    bool AngryChecked;
+    bool SadChecked;
+    bool NeutralChecked;
+    bool CalmChecked;
+    bool HappyChecked;
+    bool FearChecked;
+    bool DisgustChecked;
+    bool SurprisedChecked;
+
+    bool TwentyChecked;
+    bool ThirtyChecked;
+    bool FortyChecked;
+    bool FiftyChecked;
+    bool SixtyChecked;
+    bool SeventyChecked;
+    bool EightyChecked;
+  };
+
+  UIState state = {};
+
+  state.MaleChecked = lv_obj_has_state(ui_MaleCheckbox, LV_STATE_CHECKED);
+  state.FemaleChecked = lv_obj_has_state(ui_FemaleCheckbox, LV_STATE_CHECKED);
+
+  state.AngryChecked = lv_obj_has_state(ui_AngryCheckBox, LV_STATE_CHECKED);
+  state.SadChecked = lv_obj_has_state(ui_SadCheckBox, LV_STATE_CHECKED);
+  state.NeutralChecked = lv_obj_has_state(ui_NeutralCheckBox, LV_STATE_CHECKED);
+  state.CalmChecked = lv_obj_has_state(ui_CalmCheckBox, LV_STATE_CHECKED);
+  state.HappyChecked = lv_obj_has_state(ui_HappyCheckBox, LV_STATE_CHECKED);
+  state.FearChecked = lv_obj_has_state(ui_FearCheckBox, LV_STATE_CHECKED);
+  state.DisgustChecked = lv_obj_has_state(ui_DisgustCheckBox, LV_STATE_CHECKED);
+  state.SurprisedChecked = lv_obj_has_state(ui_SurprizedCheckBox, LV_STATE_CHECKED);
+
+  state.TwentyChecked = lv_obj_has_state(ui_twentyCheckbox, LV_STATE_CHECKED);
+  state.ThirtyChecked = lv_obj_has_state(ui_thirtyCheckbox, LV_STATE_CHECKED);
+  state.FortyChecked = lv_obj_has_state(ui_fortyCheckbox, LV_STATE_CHECKED);
+  state.FiftyChecked = lv_obj_has_state(ui_fiftyCheckbox, LV_STATE_CHECKED);
+  state.SixtyChecked = lv_obj_has_state(ui_sixtyCheckbox, LV_STATE_CHECKED);
+  state.SeventyChecked = lv_obj_has_state(ui_seventyCheckbox, LV_STATE_CHECKED);
+  state.EightyChecked = lv_obj_has_state(ui_eightyCheckbox, LV_STATE_CHECKED);
+
+  int anomaliScore = 0;
+
+  if ((ageResult == "twenties" && state.TwentyChecked) ||
+      (ageResult == "thirties" && state.ThirtyChecked) ||
+      (ageResult == "forties" && state.FortyChecked) ||
+      (ageResult == "fifties" && state.FiftyChecked) ||
+      (ageResult == "sixties" && state.SixtyChecked) ||
+      (ageResult == "seventies" && state.SeventyChecked) ||
+      (ageResult == "eighties" && state.EightyChecked))
+  {
+    anomaliScore++;
+  }
+
+  if ((strcmp(genderResult, "Male") == 0 && state.MaleChecked) ||
+      (strcmp(genderResult, "Female") == 0 && state.FemaleChecked))
+  {
+    anomaliScore++;
+  }
+
+  if ((strcmp(emotionResult, "happy") == 0 && state.HappyChecked) ||
+      (strcmp(emotionResult, "fear") == 0 && state.FearChecked) ||
+      (strcmp(emotionResult, "angry") == 0 && state.AngryChecked) ||
+      (strcmp(emotionResult, "sad") == 0 && state.SadChecked) ||
+      (strcmp(emotionResult, "neutral") == 0 && state.NeutralChecked) ||
+      (strcmp(emotionResult, "calm") == 0 && state.CalmChecked) ||
+      (strcmp(emotionResult, "disgust") == 0 && state.DisgustChecked) ||
+      (strcmp(emotionResult, "surprised") == 0 && state.SurprisedChecked))
+  {
+    anomaliScore++;
+  }
+  if (anomaliScore==3){
+    return "ANOMALI";
+  }
+  return "NORMAL";
+}
+
+void sendConfig()
+{
+  if (WiFi.status() == WL_CONNECTED)
+  {
     String primary, secondary;
-    if (!readCredentials(primary, secondary)) return;
+    if (!readCredentials(primary, secondary))
+      return;
 
     String filtersJson = readFilteringConfigJSON();
 
@@ -695,17 +898,23 @@ void sendConfig() {
     if (code > 0)
       Serial.println(http.getString());
 
-    http.end();  // VERY important!
-  } else {
+    http.end(); // VERY important!
+  }
+  else
+  {
     Serial.println("WiFi not connected.");
   }
 }
 
-void sendDataTask(void* pvParameters) {
-  while (1) {
-    if (WiFi.status() == WL_CONNECTED) {
+void sendDataTask(void *pvParameters)
+{
+  while (1)
+  {
+    if (WiFi.status() == WL_CONNECTED)
+    {
       String primary, secondary;
-      if (!readCredentials(primary, secondary)) return;
+      if (!readCredentials(primary, secondary))
+        return;
 
       String filtersJson = readFilteringConfigJSON();
 
@@ -729,36 +938,46 @@ void sendDataTask(void* pvParameters) {
       if (code > 0)
         Serial.println(http.getString());
 
-      http.end();  // VERY important!
-    } else {
+      http.end(); // VERY important!
+    }
+    else
+    {
       Serial.println("WiFi not connected.");
     }
 
-    vTaskDelay(pdMS_TO_TICKS(5000));  // for debugging, reduce interval
+    vTaskDelay(pdMS_TO_TICKS(5000)); // for debugging, reduce interval
   }
 }
 
-void configWatcherTask(void* param) {
-  while (1) {
+void configWatcherTask(void *param)
+{
+  while (1)
+  {
     File f = SD_MMC.open("/samplingRateConfig.txt", FILE_READ);
-    if (f) {
+    if (f)
+    {
       uint32_t currentHash = calculateFileCRC32(f);
-      if (currentHash != lastFileHash) {
+      if (currentHash != lastFileHash)
+      {
         Serial.println("Detected change in samplingRateConfig.txt.");
         lastFileHash = currentHash;
         RestartDynamicRecordingTask();
       }
       f.close();
-    } else {
+    }
+    else
+    {
       Serial.println("Failed to open samplingRateConfig.txt for monitoring.");
     }
 
-    vTaskDelay(pdMS_TO_TICKS(10000));  // Check every 10 sec
+    vTaskDelay(pdMS_TO_TICKS(10000)); // Check every 10 sec
   }
 }
 
-void RestartDynamicRecordingTask() {
-  if (dynamicRecordingHandle) {
+void RestartDynamicRecordingTask()
+{
+  if (dynamicRecordingHandle)
+  {
     vTaskDelete(dynamicRecordingHandle);
     dynamicRecordingHandle = NULL;
     Serial.println("Old recording task killed.");
@@ -767,22 +986,24 @@ void RestartDynamicRecordingTask() {
   loadSamplingSchedule();
 
   xTaskCreatePinnedToCore(
-    dynamicRecordingTask,
-    "DynamicRecording",
-    8192,
-    NULL,
-    1,
-    &dynamicRecordingHandle,
-    0  // Core 0
+      dynamicRecordingTask,
+      "DynamicRecording",
+      8192,
+      NULL,
+      1,
+      &dynamicRecordingHandle,
+      0 // Core 0
   );
 
   Serial.println("Recording task restarted.");
 }
 
-void rtcDriverTask(void* param) {
-  while (true) {
-    PCF85063_Read_Time(&datetime);    // Update global datetime for UI
-    vTaskDelay(pdMS_TO_TICKS(1000));  // Update every 1 sec
+void rtcDriverTask(void *param)
+{
+  while (true)
+  {
+    PCF85063_Read_Time(&datetime);   // Update global datetime for UI
+    vTaskDelay(pdMS_TO_TICKS(1000)); // Update every 1 sec
   }
 }
 
@@ -857,18 +1078,91 @@ void setupI2S() {
   Serial.printf("I2S Actual RX Slot Mode: %s\n", i2s.rxSlotMode() == I2S_SLOT_MODE_MONO ? "Mono" : "Stereo");
 }
 
-void Driver_Init() {
+void setupI2S() {
+  Serial.println("=== I2S Setup ===");
+  
+  // Configure I2S pins
+  i2s.setPins(I2S_PIN_BCK, I2S_PIN_WS, I2S_PIN_DOUT, I2S_PIN_DIN);
+  i2s.setTimeout(1000);
+
+  // Initialize I2S in standard mode for recording
+  bool success = i2s.begin(I2S_MODE_STD, SAMPLE_RATE, I2S_DATA_BIT_WIDTH_32BIT, I2S_SLOT_MODE_MONO);
+  if (!success) {
+    Serial.println("ERROR: I2S begin failed!");
+    Serial.printf("Last I2S error: %d\n", i2s.lastError());
+    while (1) {
+      delay(1000);
+      Serial.println("I2S initialization failed - system halted");
+    }
+  }
+  
+  Serial.println("I2S begin successful");
+
+  // Configure RX channel for recording
+  success = i2s.configureRX(SAMPLE_RATE, I2S_DATA_BIT_WIDTH_32BIT, I2S_SLOT_MODE_MONO, I2S_RX_TRANSFORM_NONE);
+  if (!success) {
+    Serial.println("ERROR: I2S configureRX failed!");
+    Serial.printf("Last I2S error: %d\n", i2s.lastError());
+    while (1) {
+      delay(1000);
+      Serial.println("I2S RX configuration failed - system halted");
+    }
+  }
+  
+  Serial.println("I2S RX configuration successful");
+
+  // Verify RX channel handle exists
+  i2s_chan_handle_t rx_handle = i2s.rxChan();
+  if (!rx_handle) {
+    Serial.println("ERROR: RX channel handle is NULL after configuration.");
+    while (1) {
+      delay(1000);
+      Serial.println("I2S RX handle NULL - system halted");
+    }
+  }
+  
+  Serial.printf("I2S RX Handle: %p\n", rx_handle);
+  
+  // Ensure channel starts in disabled state
+  esp_err_t err = i2s_channel_disable(rx_handle);
+  Serial.printf("Initial channel disable: %s\n", esp_err_to_name(err));
+  
+  // Brief delay
+  vTaskDelay(pdMS_TO_TICKS(50));
+  
+  // Test enable/disable cycle
+  err = i2s_channel_enable(rx_handle);
+  if (err == ESP_OK) {
+    Serial.println("I2S channel test enable successful");
+    vTaskDelay(pdMS_TO_TICKS(50));
+    
+    err = i2s_channel_disable(rx_handle);
+    Serial.printf("I2S channel test disable: %s\n", esp_err_to_name(err));
+  } else {
+    Serial.printf("WARNING: I2S channel enable test failed: %s\n", esp_err_to_name(err));
+  }
+  
+  Serial.println("I2S setup complete - ready for recording");
+  Serial.printf("I2S Target Sample Rate: %d Hz\n", SAMPLE_RATE);
+  Serial.printf("I2S Actual RX Sample Rate: %f Hz\n", i2s.rxSampleRate());
+  Serial.printf("I2S Actual RX Bit Width: %d-bit\n", (int)i2s.rxDataWidth());
+  Serial.printf("I2S Actual RX Slot Mode: %s\n", i2s.rxSlotMode() == I2S_SLOT_MODE_MONO ? "Mono" : "Stereo");
+}
+
+void Driver_Init()
+{
   Flash_test();
   PWR_Init();
   BAT_Init();
   I2C_Init();
   TCA9554PWR_Init(0x00);
   Backlight_Init();
-  Set_Backlight(50);  //0~100
+  Set_Backlight(50); // 0~100
   PCF85063_Init();
-  //QMI8658_Init();
+  // QMI8658_Init();
 }
-void setup() {
+void setup()
+{
   Serial.begin(115200);
   // Check PSRAM
   size_t ps = esp_psram_get_size();
@@ -877,13 +1171,15 @@ void setup() {
 
   WiFi.begin(SSID, PASSWD);
 
-  while (WiFi.status() != WL_CONNECTED) {
+  while (WiFi.status() != WL_CONNECTED)
+  {
     delay(500);
   }
 
   configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
   struct tm timeinfo;
-  if (getLocalTime(&timeinfo)) {
+  if (getLocalTime(&timeinfo))
+  {
     datetime.year = timeinfo.tm_year + 1900;
     datetime.month = timeinfo.tm_mon + 1;
     datetime.day = timeinfo.tm_mday;
@@ -899,6 +1195,8 @@ void setup() {
   Driver_Init();
   setupI2S();
   SD_Init();
+  //Audio_Init();
+  //MIC_Init();
   LCD_Init();
   Lvgl_Init();
   File f = SD_MMC.open("/samplingRateConfig.txt", FILE_READ);
@@ -911,25 +1209,26 @@ void setup() {
   ui_init();
 
   xTaskCreatePinnedToCore(
-    configWatcherTask,
-    "ConfigWatcher",
-    4096,
-    NULL,
-    1,
-    NULL,
-    0  // Core 0
+      configWatcherTask,
+      "ConfigWatcher",
+      4096,
+      NULL,
+      1,
+      NULL,
+      0 // Core 0
   );
   xTaskCreatePinnedToCore(
-    rtcDriverTask,
-    "RTC Driver",
-    2048,
-    NULL,
-    1,
-    NULL,
-    0  // Core 0
+      rtcDriverTask,
+      "RTC Driver",
+      2048,
+      NULL,
+      1,
+      NULL,
+      0 // Core 0
   );
 }
-void loop() {
+void loop()
+{
   Lvgl_Loop();
   vTaskDelay(pdMS_TO_TICKS(5));
 }
